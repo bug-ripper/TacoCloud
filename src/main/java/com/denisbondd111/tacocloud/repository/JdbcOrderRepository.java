@@ -26,11 +26,11 @@ public class JdbcOrderRepository implements OrderRepository{
     private final String SQL_SAVE_TACO = "insert into Taco (name, created_at, taco_order, taco_order_key) values (?, ?, ?, ?)";
     //language=SQL
     private final String SQL_SAVE_INGREDIENT_REF = "insert into Ingredient_Ref (ingredient, taco, taco_key) values (?, ?, ?)";
-    private JdbcOperations jdbcOperations;
+    private JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public JdbcOrderRepository(JdbcOperations jdbcOperations) {
-        this.jdbcOperations = jdbcOperations;
+    public JdbcOrderRepository(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
@@ -56,9 +56,9 @@ public class JdbcOrderRepository implements OrderRepository{
                         tacoOrder.getCcCVV(),
                         tacoOrder.getPlacedAt())
         );
-        jdbcOperations.update(psc, keyHolder);
-        long orderId = keyHolder.getKey().longValue();
-        tacoOrder.setId(orderId);
+        jdbcTemplate.update(psc, keyHolder);
+        Integer orderId = (Integer) keyHolder.getKeys().get("id");
+        tacoOrder.setId(orderId.longValue());
         List<Taco> tacos = tacoOrder.getTacos();
 
         int i = 0;
@@ -84,9 +84,10 @@ public class JdbcOrderRepository implements OrderRepository{
         );
 
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcOperations.update(psc, keyHolder);
-        long tacoId = keyHolder.getKey().longValue();
-        taco.setId(tacoId);
+        jdbcTemplate.update(psc, keyHolder);
+        Integer tacoId = (Integer) keyHolder.getKeys().get("id");
+
+        taco.setId(tacoId.longValue());
 
         saveIngredientRefs(tacoId, taco.getIngredients().stream().map(ingredient -> new IngredientRef(ingredient.getId())).collect(Collectors.toList()));
 
@@ -96,7 +97,7 @@ public class JdbcOrderRepository implements OrderRepository{
     private void saveIngredientRefs(long tacoId, List<IngredientRef> ingredientRefs){
         int key = 0;
         for(IngredientRef ingredientRef : ingredientRefs){
-            jdbcOperations.update(
+            jdbcTemplate.update(
                     SQL_SAVE_INGREDIENT_REF,
                     ingredientRef.getIngredient(), tacoId, key++
             );

@@ -4,5 +4,10 @@ spring:
   thymeleaf:
     cache: false
   datasource:
-    generate-unique-name: false
-    name: tacoCloud
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/taco_cloud
+    username: postgres
+    password: 27112004
+  sql:
+    init:
+      mode: always
