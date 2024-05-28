@@ -8,6 +8,9 @@ spring:
     url: jdbc:postgresql://localhost:5432/taco_cloud
     username: postgres
     password: 27112004
-#  sql:
-#    init:
-#      mode: always
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create
+    database: postgresql
+    show-sql: true

@@ -1,18 +1,13 @@
 package com.denisbondd111.tacocloud.domain;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.domain.Persistable;
-import org.springframework.data.relational.core.mapping.Table;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import lombok.*;
 
 @Data
-@Table
 @AllArgsConstructor
-@NoArgsConstructor(access= AccessLevel.PRIVATE, force=true)
-public class Ingredient implements Persistable<String> {
+@Entity
+public class Ingredient {
     @Id
     private String id;
 
@@ -20,9 +15,8 @@ public class Ingredient implements Persistable<String> {
 
     private Type type;
 
-    @Override
-    public boolean isNew() {
-        return true;
+    public Ingredient() {
+
     }
 
     public enum Type {
