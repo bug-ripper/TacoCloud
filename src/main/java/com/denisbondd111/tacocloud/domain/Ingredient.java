@@ -1,20 +1,32 @@
 package com.denisbondd111.tacocloud.domain;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.domain.Persistable;
+import org.springframework.data.relational.core.mapping.Table;
 
 @Data
-public class Ingredient {
+@Table
+@AllArgsConstructor
+@NoArgsConstructor(access= AccessLevel.PRIVATE, force=true)
+public class Ingredient implements Persistable<String> {
+    @Id
     private String id;
+
     private String name;
+
     private Type type;
 
-    public Ingredient(String id, String name, Type type) {
-        this.id = id;
-        this.name = name;
-        this.type = type;
+    @Override
+    public boolean isNew() {
+        return true;
     }
 
-    public enum Type{
+    public enum Type {
         WRAP, PROTEIN, VEGGIES, CHEESE, SAUCE
     }
+
 }

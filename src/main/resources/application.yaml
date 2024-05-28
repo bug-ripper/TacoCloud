@@ -8,6 +8,6 @@ spring:
     url: jdbc:postgresql://localhost:5432/taco_cloud
     username: postgres
     password: 27112004
-  sql:
-    init:
-      mode: always
+#  sql:
+#    init:
+#      mode: always
